@@ -1,0 +1,57 @@
+version: '3'
+services:
+  hadoop-master:
+    build: .
+    container_name: hadoop-master
+    hostname: hadoop-master
+    networks:
+      - hadoop-net
+    ports:
+      - "9870:9870"
+      - "8088:8088"
+      - "9000:9000"
+    volumes:
+      - ./config/core-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/hdfs-site.xml
+      - ./config/mapred-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/mapred-site.xml
+      - ./config/yarn-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/yarn-site.xml
+      - ./config/workers:/home/hadoop/hadoop-3.3.0/etc/hadoop/workers
+      - ./data/master:/home/hadoop/hadoop-3.3.0/dfs/name
+    environment:
+      - HADOOP_ROLE=master
+
+  hadoop-slave1:
+    build: .
+    container_name: hadoop-slave1
+    hostname: hadoop-slave1
+    networks:
+      - hadoop-net
+    volumes:
+      - ./config/core-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/hdfs-site.xml
+      - ./config/mapred-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/mapred-site.xml
+      - ./config/yarn-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/yarn-site.xml
+      - ./config/workers:/home/hadoop/hadoop-3.3.0/etc/hadoop/workers
+      - ./data/slave1:/home/hadoop/hadoop-3.3.0/dfs/data
+    environment:
+      - HADOOP_ROLE=slave
+
+  hadoop-slave2:
+    build: .
+    container_name: hadoop-slave2
+    hostname: hadoop-slave2
+    networks:
+      - hadoop-net
+    volumes:
+      - ./config/core-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/hdfs-site.xml
+      - ./config/mapred-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/mapred-site.xml
+      - ./config/yarn-site.xml:/home/hadoop/hadoop-3.3.0/etc/hadoop/yarn-site.xml
+      - ./config/workers:/home/hadoop/hadoop-3.3.0/etc/hadoop/workers
+      - ./data/slave2:/home/hadoop/hadoop-3.3.0/dfs/data
+    environment:
+      - HADOOP_ROLE=slave
+
+networks:
+  hadoop-net:
+    driver: bridge
